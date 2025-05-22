@@ -1,7 +1,7 @@
 package domain;
 
 public class Estrategia {
-    private int id_estrategia;
+    private Long id_estrategia;
     private String nome;
     private String descricao;
     private String exemplo;
@@ -16,12 +16,12 @@ public class Estrategia {
         this.dica = dica;
     }
 
-    public int getid_estrategia(){
+    public Long getid_estrategia(){
         return id_estrategia;
     }
 
 
-    public void setid_estrategia(int id_estrategia){
+    public void setid_estrategia(Long id_estrategia){
         this.id_estrategia = id_estrategia;
     }
 

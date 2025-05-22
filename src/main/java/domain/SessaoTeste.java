@@ -1,37 +1,49 @@
 package domain;
-import java.sql.Timestamp;
 
+import java.sql.Timestamp;
 
 public class SessaoTeste {
 
-    private int id_sessao;
-    private String nome_sessao;
-    private Timestamp data_sessao;
-    private String descricao_sessao;
+    private int idSessao;
+    private String nomeSessao;
+    private Timestamp dataSessao;
+    private String descricaoSessao;
     private String nomeTestador;
-
-    private int estrategia_id;
-
-    private int projeto_id;
-
-    private int usuario_id;
-
+    private Long estrategiaId;
+    private Long projetoId;
+    private int usuarioId;
     private int tempo;
 
-    public int getId() {
-        return id_sessao;
+    public int getIdSessao() {
+        return idSessao;
     }
 
-    public void setId(int id_sessao) {
-        this.id_sessao = id_sessao;
+    public void setIdSessao(int idSessao) {
+        this.idSessao = idSessao;
     }
 
-    public String getDescricao() {
-        return descricao_sessao;
+    public String getNomeSessao() {
+        return nomeSessao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao_sessao = descricao_sessao;
+    public void setNomeSessao(String nomeSessao) {
+        this.nomeSessao = nomeSessao;
+    }
+
+    public Timestamp getDataSessao() {
+        return dataSessao;
+    }
+
+    public void setDataSessao(Timestamp dataSessao) {
+        this.dataSessao = dataSessao;
+    }
+
+    public String getDescricaoSessao() {
+        return descricaoSessao;
+    }
+
+    public void setDescricaoSessao(String descricaoSessao) {
+        this.descricaoSessao = descricaoSessao;
     }
 
     public String getNomeTestador() {
@@ -42,12 +54,28 @@ public class SessaoTeste {
         this.nomeTestador = nomeTestador;
     }
 
-    public int getEstrategiaId() {
-        return estrategia_id;
+    public Long getEstrategiaId() {
+        return estrategiaId;
     }
 
-    public void setEstrategiaId(int estrategia_id ) {
-        this.estrategia_id = estrategia_id;
+    public void setEstrategiaId(Long estrategiaId) {
+        this.estrategiaId = estrategiaId;
+    }
+
+    public Long getProjetoId() {
+        return projetoId;
+    }
+
+    public void setProjetoId(Long projetoId) {
+        this.projetoId = projetoId;
+    }
+
+    public int getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public int getTempo() {
@@ -56,29 +84,5 @@ public class SessaoTeste {
 
     public void setTempo(int tempo) {
         this.tempo = tempo;
-    }
-
-    public int getProjetoId() {
-        return projeto_id;
-    }
-
-    public void setProjetoId(int projetoId) {
-        this.projeto_id = projeto_id;
-    }
-
-    public int getUsuarioId() {
-        return usuario_id;
-    }
-
-    public void setUsuarioId(int usuarioId) {
-        this.usuario_id = usuario_id;
-    }
-
-    public Timestamp getDataSessao() {
-        return data_sessao;
-    }
-
-    public void setDataSessao(Timestamp data_sessao) {
-        this.data_sessao = data_sessao;
     }
 }

@@ -1,4 +1,4 @@
-package controller;
+package servlet;
 
 import dao.EstrategiaDAO;
 import domain.Estrategia;
@@ -33,7 +33,7 @@ public class CadastroEstrategiaServlet extends HttpServlet {
 
         Estrategia e = new Estrategia(nome, descricao, exemplo ,dica);
 
-        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TesteDB", "admin", "1234")){
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "admin", "1234")){
             EstrategiaDAO dao = new EstrategiaDAO(conn);
             dao.cadastro(e);
             response.sendRedirect(request.getContextPath() + "/estrategias/cadastro.jsp?sucesso=true");
