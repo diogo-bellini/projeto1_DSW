@@ -36,7 +36,7 @@ public class CadastroEstrategiaServlet extends HttpServlet {
         try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "root", "root")){
             EstrategiaDAO dao = new EstrategiaDAO(conn);
             dao.cadastro(e);
-            response.sendRedirect(request.getContextPath() + "/estrategias/cadastro.jsp?sucesso=true");
+            response.sendRedirect(request.getContextPath() + "/estrategias/cadastroEstrategia.jsp?sucesso=true");
         } catch (SQLException ex) {
             ex.printStackTrace();
             request.setAttribute("erro", "Não foi possivel cadastrar a estrategia");
