@@ -1,4 +1,4 @@
-package servlet;
+package controller;
 
 import dao.EstrategiaDAO;
 import domain.Estrategia;
@@ -16,7 +16,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @WebServlet("/cadastrar-estrategia")
-public class CadastroEstrategiaServlet extends HttpServlet {
+public class EstrategiaController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -34,7 +34,7 @@ public class CadastroEstrategiaServlet extends HttpServlet {
         Estrategia e = new Estrategia(nome, descricao, exemplo ,dica);
 
         try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "root", "root")){
-            EstrategiaDAO dao = new EstrategiaDAO(conn);
+            EstrategiaDAO dao = new EstrategiaDAO();
             dao.cadastro(e);
             response.sendRedirect(request.getContextPath() + "/estrategias/cadastroEstrategia.jsp?sucesso=true");
         } catch (SQLException ex) {
