@@ -5,9 +5,10 @@ import java.sql.*;
 
 public class SessaoTesteDAO {
     public Long cadastrarSessao(SessaoTeste sessao) throws SQLException {
-        String sql = "INSERT INTO SessaoTeste(descricao, nome_testador, estrategia_id, tempo, projeto_id, usuario_id,data_criacao) " +
+        String sql = "INSERT INTO SessaoTeste(descricao, nome_testador, estrategia_id, tempo, projeto_id, usuario_id, data_criacao) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "usuario", "senha");
+
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "root", "root");
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, sessao.getDescricaoSessao());
@@ -21,15 +22,23 @@ public class SessaoTesteDAO {
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
+            Long idGerado = null;
+
             if (rs.next()) {
-                return rs.getLong(1);
+                idGerado = rs.getLong(1);
             }
+
+            if (idGerado != null) {
+                UsuarioSessaoDAO dao_aux = new UsuarioSessaoDAO();
+                dao_aux.cadastrar(sessao.getUsuarioId(), idGerado);
+            }
+
+            return idGerado;
         }
-        return null;
     }
     public void criarStatusUsuarioSessao(Long usuarioId, Long sessaoId) throws SQLException {
         String sql = "INSERT INTO UsuarioSessao(usuario_id, sessao_id, status) VALUES (?, ?, 'criado')";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "usuario", "senha");
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "root", "root");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, usuarioId);
             stmt.setLong(2, sessaoId);
