@@ -33,7 +33,7 @@
         <label>
             <fmt:message key="campo.estrategia" />:
             <select name="estrategiaId" required>
-                <c:forEach var="e" items="${estrategias}">
+                <c:forEach var="e" items="${applicationScope.listaEstrategias}">
                     <option value="${e.id}">${e.nome}</option>
                 </c:forEach>
             </select>

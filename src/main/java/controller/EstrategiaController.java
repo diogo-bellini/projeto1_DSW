@@ -50,11 +50,7 @@ public class EstrategiaController extends HttpServlet {
             EstrategiaDAO estrategia_dao = new EstrategiaDAO();
             estrategia_dao.cadastro(estrategia);
 
-            List<Estrategia> listaEstrategias = (List<Estrategia>) getServletContext().getAttribute("listaEstrategias");
-            if (listaEstrategias == null) {
-                listaEstrategias = new ArrayList<>();
-            }
-            listaEstrategias.add(estrategia);
+            List<Estrategia> listaEstrategias = estrategia_dao.buscarTodas();
             getServletContext().setAttribute("listaEstrategias", listaEstrategias);
 
             response.sendRedirect(request.getContextPath() + "/logado/admin/estrategia/cadastroEstrategia.jsp?sucesso=true");
