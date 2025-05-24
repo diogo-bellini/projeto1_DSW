@@ -70,11 +70,6 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>br.ufscar.dc.dsw</groupId>
-      <artifactId>projeto1_DSW</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
   </dependencies>
 
   <build>
