@@ -1,15 +1,13 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UsuarioSessaoDAO extends GenericDAO{
     public UsuarioSessaoDAO() {
         super();
     }
 
-    public boolean cadastrar(long idUsuario, long idSessao) {
+    public void cadastrar(long idUsuario, long idSessao) {
         String sql = "INSERT INTO UsuarioSessao(usuario_id, sessao_id, status) VALUES (?,?,?)";
 
         try(Connection conn = getConnection();
@@ -20,12 +18,8 @@ public class UsuarioSessaoDAO extends GenericDAO{
             stmt.setString(3, "criado");
 
             stmt.executeUpdate();
-
-            return true;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
 }

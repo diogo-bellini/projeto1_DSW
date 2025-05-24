@@ -11,6 +11,18 @@
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
+    <a href="${pageContext.request.contextPath}">Cadastrar Testador</a>
+  </li>
+  <li>
+    <a href="${pageContext.request.contextPath}">Cadastrar Administrador</a>
+  </li>
+  <li>
+    <a href="${pageContext.request.contextPath}">Cadastrar Projeto</a>
+  </li>
+  <li>
+    <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia.jsp">Cadastrar Estratégia</a>
+  </li>
+  <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
   </li>
 </ul>

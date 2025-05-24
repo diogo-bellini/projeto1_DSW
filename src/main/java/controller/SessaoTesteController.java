@@ -1,7 +1,9 @@
-package servlet;
+package controller;
 
-import domain.SessaoTeste;
 import dao.SessaoTesteDAO;
+import domain.SessaoTeste;
+import domain.Usuario;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
@@ -9,11 +11,32 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class CadastroSessaoTesteServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/sessaoTeste/*"})
+public class SessaoTesteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getPathInfo();
+        if (action == null) {
+            action = "";
+        }
+
         try {
-            Long usuarioId = (Long) request.getSession().getAttribute("usuarioId");
-            String nomeTestador = (String) request.getSession().getAttribute("nome");
+            switch (action) {
+                case "/cadastroSessaoTeste":
+                    insere(request, response);
+                    break;
+                default:
+                    break;
+            }
+        } catch (RuntimeException | IOException | ServletException e) {
+            throw new ServletException(e);
+        }
+    }
+
+    private void insere(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try{
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
+            Int usuarioId = usuario.getId_usuario();
+            String nomeTestador = usuario.getNome();
 
             SessaoTeste sessao = new SessaoTeste();
             sessao.setDescricaoSessao(request.getParameter("descricaoSessao"));
@@ -23,9 +46,8 @@ public class CadastroSessaoTesteServlet extends HttpServlet {
             sessao.setUsuarioId(Math.toIntExact(usuarioId));
             sessao.setNomeTestador(nomeTestador);
 
-            SessaoTesteDAO dao = new SessaoTesteDAO();
-            Long sessaoId = dao.cadastrarSessao(sessao);
-            dao.criarStatusUsuarioSessao(usuarioId, sessaoId);
+            SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+            Long sessaoId = sessao_teste_dao.cadastrar(sessao);
 
             response.sendRedirect("listarSessoes.jsp?projetoId=" + sessao.getProjetoId());
         } catch (Exception e) {
