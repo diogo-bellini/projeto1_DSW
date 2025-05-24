@@ -18,7 +18,7 @@ public class EstrategiaDAO extends GenericDAO {
         String sql = "INSERT INTO Estrategia (nome, descricao, exemplo, dica) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, estrategia.getNome());
             stmt.setString(2, estrategia.getDescricao());

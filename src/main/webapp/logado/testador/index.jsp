@@ -12,7 +12,7 @@
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/testador/cadastroSessaoTeste.jsp">Logout</a>
+    <a href="${pageContext.request.contextPath}/logado/testador/cadastroSessaoTeste.jsp">Cadastrar Sessão de Teste</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>

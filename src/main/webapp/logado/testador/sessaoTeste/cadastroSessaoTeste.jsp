@@ -19,7 +19,7 @@
 
     <h1><fmt:message key="titulo.cadastro.sessao" /></h1>
 
-    <form action="CadastroSessaoTesteServlet" method="post">
+    <form action="cadastroSessaoTeste" method="post">
         <label>
             <fmt:message key="campo.projeto" />:
             <select name="projetoId" required>

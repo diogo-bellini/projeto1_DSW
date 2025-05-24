@@ -11,7 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/sessaoTeste/*"})
+@WebServlet(urlPatterns = {"/logado/testador/sessaoTeste/*"})
 public class SessaoTesteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
@@ -39,7 +39,7 @@ public class SessaoTesteController extends HttpServlet {
             String nomeTestador = usuario.getNome();
 
             SessaoTeste sessao = new SessaoTeste();
-            sessao.setDescricaoSessao(request.getParameter("descricaoSessao"));
+            sessao.setDescricaoSessao(request.getParameter("descricao"));
             sessao.setTempo(Integer.parseInt(request.getParameter("tempo")));
             sessao.setEstrategiaId(Long.parseLong(request.getParameter("estrategiaId")));
             sessao.setProjetoId(Long.parseLong(request.getParameter("projetoId")));
