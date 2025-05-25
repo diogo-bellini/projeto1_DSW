@@ -20,7 +20,7 @@
     <a href="${pageContext.request.contextPath}">Cadastrar Projeto</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia.jsp">Cadastrar Estratégia</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia">Cadastrar Estratégia</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
