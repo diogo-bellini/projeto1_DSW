@@ -3,18 +3,39 @@ package domain;
 import java.sql.Timestamp;
 
 public class Usuario {
-    private int id_usuario;
+    private Long id_usuario;
     private String nome;
     private String email;
     private String senha;
     private Papel papel;
     private Timestamp data_criacao;
 
-    public int getId_usuario() {
+    public Usuario(Long id) {
+        this.id_usuario = id;
+    }
+
+    public Usuario(String nome, String login, String senha, Papel papel) {
+        super();
+        this.nome = nome;
+        this.email = login;
+        this.senha = senha;
+        this.papel = papel;
+    }
+
+    public Usuario(Long id, String nome, String login, String senha, Papel papel) {
+        super();
+        this.id_usuario = id;
+        this.nome = nome;
+        this.email = login;
+        this.senha = senha;
+        this.papel = papel;
+    }
+
+    public Long getId_usuario() {
         return id_usuario;
     }
 
-    public void setId_usuario(int id_usuario) {
+    public void setId_usuario(Long id_usuario) {
         this.id_usuario = id_usuario;
     }
 
@@ -26,11 +47,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getEmail() {
+    public String getLogin() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setLogin(String email) {
         this.email = email;
     }
 
