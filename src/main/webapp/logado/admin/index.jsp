@@ -11,10 +11,10 @@
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
-    <a href="${pageContext.request.contextPath}">Cadastrar Testador</a>
+    <a href="${pageContext.request.contextPath}">CRUD Testador</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}">Cadastrar Administrador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/listaAdmin.jsp">CRUD Administrador</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}">Cadastrar Projeto</a>

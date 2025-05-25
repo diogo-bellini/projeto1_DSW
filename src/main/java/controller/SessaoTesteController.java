@@ -53,6 +53,7 @@ public class SessaoTesteController extends HttpServlet {
     private void insere(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
+
             Long usuarioId = usuario.getId_usuario();
             String nomeTestador = usuario.getNome();
 
