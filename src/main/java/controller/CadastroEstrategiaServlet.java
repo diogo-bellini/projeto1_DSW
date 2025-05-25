@@ -1,4 +1,4 @@
-package servlet;
+package controller;
 
 import dao.EstrategiaDAO;
 import domain.Estrategia;
@@ -21,26 +21,29 @@ public class CadastroEstrategiaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+
+        Object tipoUsuario = request.getSession().getAttribute("tipo");
+        if (tipoUsuario == null || !"admin".equals(tipoUsuario.toString())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Apenas administradores podem cadastrar.");
+            return;
+        }
+
+        // Pega os parâmetros do formulário
         String nome = request.getParameter("nome");
         String descricao = request.getParameter("descricao");
         String exemplo = request.getParameter("exemplo");
         String dica = request.getParameter("dica");
-        Estrategia estrategia = new Estrategia();
-        estrategia.setNome(nome);
-        estrategia.setDescricao(descricao);
-        estrategia.setExemplo(exemplo);
-        estrategia.setDica(dica);
 
-        Estrategia e = new Estrategia(nome, descricao, exemplo ,dica);
+        Estrategia estrategia = new Estrategia(nome, descricao, exemplo ,dica);
 
-        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "admin", "1234")){
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TesteDB", "admin", "admin")) {
             EstrategiaDAO dao = new EstrategiaDAO(conn);
-            dao.cadastro(e);
+            dao.cadastro(estrategia);
             response.sendRedirect(request.getContextPath() + "/estrategias/cadastro.jsp?sucesso=true");
         } catch (SQLException ex) {
             ex.printStackTrace();
-            request.setAttribute("erro", "Não foi possivel cadastrar a estrategia");
-            request.getRequestDispatcher("/estrategias/cadastrar.jsp").forward(request, response);
+            request.setAttribute("erro", "Não foi possível cadastrar a estratégia");
+            request.getRequestDispatcher("/estrategias/cadastro.jsp").forward(request, response);
         }
     }
 }

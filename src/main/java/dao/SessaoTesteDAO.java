@@ -7,7 +7,7 @@ public class SessaoTesteDAO {
     public Long cadastrarSessao(SessaoTeste sessao) throws SQLException {
         String sql = "INSERT INTO SessaoTeste(descricao, nome_testador, estrategia_id, tempo, projeto_id, usuario_id,data_criacao) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "usuario", "senha");
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TesteDB", "usuario", "senha");
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, sessao.getDescricaoSessao());
@@ -29,7 +29,7 @@ public class SessaoTesteDAO {
     }
     public void criarStatusUsuarioSessao(Long usuarioId, Long sessaoId) throws SQLException {
         String sql = "INSERT INTO UsuarioSessao(usuario_id, sessao_id, status) VALUES (?, ?, 'criado')";
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/create.sql", "usuario", "senha");
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/TesteDB", "usuario", "senha");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, usuarioId);
             stmt.setLong(2, sessaoId);
