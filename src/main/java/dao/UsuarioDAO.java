@@ -38,7 +38,7 @@ public class UsuarioDAO extends GenericDAO {
             Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
-                int id = resultSet.getInt("id_usuario");
+                Long id = resultSet.getLong("id_usuario");
                 String nome = resultSet.getString("nome");
                 String login = resultSet.getString("email");
                 String senha = resultSet.getString("senha");
@@ -61,7 +61,7 @@ public class UsuarioDAO extends GenericDAO {
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setInt(1, usuario.getId_usuario());
+            statement.setLong(1, usuario.getId_usuario());
             statement.executeUpdate();
             statement.close();
             conn.close();
@@ -88,13 +88,13 @@ public class UsuarioDAO extends GenericDAO {
         }
     }
 
-    public Usuario getbyID(int id) {
+    public Usuario getbyID(Long id) {
         Usuario usuario = null;
         String sql = "SELECT * from Usuario WHERE id_usuario = ?";
         try {
             Connection conn = this.getConnection();
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 String nome = resultSet.getString("nome");
@@ -122,7 +122,7 @@ public class UsuarioDAO extends GenericDAO {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id_usuario");
+                Long id = resultSet.getLong("id_usuario");
                 String nome = resultSet.getString("nome");
                 String senha = resultSet.getString("senha");
                 String papelStr = resultSet.getString("papel");

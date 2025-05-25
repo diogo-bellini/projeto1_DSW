@@ -86,7 +86,7 @@ public class AdminController extends HttpServlet{
     }
 
     private void apresentaFormEdicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id_usuario"));
+        Long id = Long.parseLong(request.getParameter("id_usuario"));
         Usuario admin = usuarioDAO.getbyID(id);
         request.setAttribute("admin", admin);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/formAdmin.jsp");
@@ -104,7 +104,7 @@ public class AdminController extends HttpServlet{
     }
 
     private void atualiza(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("id_usuario"));
+        Long id = Long.parseLong(request.getParameter("id_usuario"));
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
@@ -115,7 +115,7 @@ public class AdminController extends HttpServlet{
     }
 
     private void remove(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int id = Integer.parseInt(request.getParameter("id_usuario"));
+        Long id = Long.parseLong(request.getParameter("id_usuario"));
         Usuario admin = new Usuario(id);
         usuarioDAO.delete(admin);
         response.sendRedirect("lista");
