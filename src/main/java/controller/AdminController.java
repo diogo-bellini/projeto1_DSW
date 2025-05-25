@@ -14,7 +14,7 @@ import domain.Usuario;
 import domain.Papel;
 import util.Erro;
 
-@WebServlet(urlPatterns = "/admin/*")
+@WebServlet(urlPatterns = "/logado/admin/*")
 public class AdminController extends HttpServlet{
     private UsuarioDAO usuarioDAO;
 
@@ -22,28 +22,44 @@ public class AdminController extends HttpServlet{
     public void init() {
         usuarioDAO = new UsuarioDAO();
     }
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    private boolean isAutorizado(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
-        Erro erros = new Erro();
+
         if (usuario == null) {
-            response.sendRedirect(request.getContextPath());
-        } else if (usuario.getPapel() != Papel.administrador) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/index.jsp");
-            dispatcher.forward(request, response);
-        } else {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return false;
+        }
+
+        if (usuario.getPapel() != Papel.administrador) {
+            Erro erros = new Erro();
             erros.add("Acesso não autorizado!");
             erros.add("Apenas Papel [administrador] tem acesso a essa página");
             request.setAttribute("mensagens", erros);
             RequestDispatcher rd = request.getRequestDispatcher("/noAuth.jsp");
             rd.forward(request, response);
+            return false;
         }
+
+        return true;
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!isAutorizado(request, response)) return;
+
+        doGet(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (!isAutorizado(request, response)) return;
+
         String action = request.getPathInfo();
-        if (action == null) action = "";
+        if (action == null || action.equals("/") || action.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
+            return;
+        }
 
         try {
             switch (action) {
@@ -66,9 +82,10 @@ public class AdminController extends HttpServlet{
                     listaAdmins(request, response);
                     break;
                 default:
+                    response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
                     break;
             }
-        } catch (RuntimeException | IOException | ServletException e) {
+        } catch (Exception e) {
             throw new ServletException(e);
         }
     }
@@ -78,18 +95,18 @@ public class AdminController extends HttpServlet{
         listaAdmins.removeIf(u1 -> u1.getPapel() != Papel.administrador);
         request.setAttribute("listaAdmins", listaAdmins);
         request.setAttribute("contextPath", request.getContextPath().replace("/", ""));
-        request.getRequestDispatcher("/admin/listaAdmin.jsp").forward(request, response);
+        request.getRequestDispatcher("/logado/admin/listaAdmin.jsp").forward(request, response);
     }
 
     private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/admin/formAdmin.jsp").forward(request, response);
+        request.getRequestDispatcher("/logado/admin/formAdmin.jsp").forward(request, response);
     }
 
     private void apresentaFormEdicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long id = Long.parseLong(request.getParameter("id_usuario"));
         Usuario admin = usuarioDAO.getbyID(id);
         request.setAttribute("admin", admin);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/formAdmin.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/formAdmin.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -100,7 +117,7 @@ public class AdminController extends HttpServlet{
         Papel papel = Papel.valueOf(request.getParameter("papel"));
         Usuario admin = new Usuario(nome, email, senha, papel);
         usuarioDAO.insert(admin);
-        response.sendRedirect("lista");
+        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
     }
 
     private void atualiza(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -111,13 +128,13 @@ public class AdminController extends HttpServlet{
         Papel papel = Papel.valueOf(request.getParameter("papel"));
         Usuario admin = new Usuario(id, nome, email, senha, papel);
         usuarioDAO.update(admin);
-        response.sendRedirect("lista");
+        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
     }
 
     private void remove(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long id = Long.parseLong(request.getParameter("id_usuario"));
         Usuario admin = new Usuario(id);
         usuarioDAO.delete(admin);
-        response.sendRedirect("lista");
+        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
     }
 }

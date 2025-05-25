@@ -1,6 +1,8 @@
 package controller;
 
 import java.io.IOException;
+
+import domain.Papel;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,10 +33,10 @@ public class IndexController extends HttpServlet{
                 if (usuario != null) {
                     if (usuario.getSenha().equals(senha)) {
                         request.getSession().setAttribute("usuarioLogado", usuario);
-                        if (usuario.getPapel().toString().equals("administrador")) {
-                            response.sendRedirect("admin/");
+                        if (usuario.getPapel() == Papel.administrador) {
+                            response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
                         } else {
-                            response.sendRedirect("testador/");
+                            response.sendRedirect(request.getContextPath() + "/logado/testador/index.jsp");
                         }
                         return;
                     } else {

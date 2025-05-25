@@ -9,28 +9,43 @@ import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/SessaoTesteController"})
+@WebServlet(urlPatterns = {"/sessaoTeste/*"})
 public class SessaoTesteController extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute("usuarioLogado");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = request.getPathInfo();
 
-        SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+        if (path == null || path.equals("/")) {
+            response.sendRedirect(request.getContextPath() + "/logado/testador/index.jsp");
+            return;
+        }
 
-        List<SessaoTeste> sessoes = sessao_teste_dao.getListaSessaoUsuario(usuario.getId_usuario());
+        switch (path) {
+            case "/cadastroSessaoTeste":
+                request.getRequestDispatcher("/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
+                        .forward(request, response);
+                break;
 
-        req.setAttribute("sessoes", sessoes);
-        req.getRequestDispatcher("${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste.jsp").forward(req, resp);
+            case "/executarSessaoTeste":
+                executarSessao(request, response);
+                request.getRequestDispatcher("/logado/testador/sessaoTeste/ExecutarSessaoTeste.jsp")
+                        .forward(request, response);
+                break;
+
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String action = request.getPathInfo();
         if (action == null) {
             action = "";
         }
@@ -40,8 +55,8 @@ public class SessaoTesteController extends HttpServlet {
                 case "/cadastrarSessao":
                     insere(request, response);
                     break;
-                case "/executarSessao":
-                    executar(request, response);
+//                case "/executarSessao":
+//                    executar(request, response);
                 default:
                     break;
             }
@@ -69,8 +84,6 @@ public class SessaoTesteController extends HttpServlet {
 
             SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
             Long sessaoId = sessao_teste_dao.cadastrar(sessao);
-
-            response.sendRedirect("listarSessoes.jsp?projetoId=" + sessao.getProjetoId());
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("erro", "Erro ao cadastrar sessão.");
@@ -79,7 +92,19 @@ public class SessaoTesteController extends HttpServlet {
     }
 
 
-    private void executar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
+            Long usuarioId = usuario.getId_usuario();
 
+            SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+            List<SessaoTeste> sessoes = sessao_teste_dao.getListaSessaoUsuario(usuarioId);
+
+            request.setAttribute("sessoes", sessoes);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Erro ao cadastrar sessão.");
+            request.getRequestDispatcher("erro.jsp").forward(request, response);
+        }
     }
 }
