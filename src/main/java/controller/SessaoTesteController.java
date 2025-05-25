@@ -23,19 +23,19 @@ public class SessaoTesteController extends HttpServlet {
         String path = request.getPathInfo();
 
         if (path == null || path.equals("/")) {
-            response.sendRedirect(request.getContextPath() + "/logado/testador/index-admin.jsp");
+            request.getRequestDispatcher("/WEB-INF/views/index-testador.jsp").forward(request, response);
             return;
         }
 
         switch (path) {
             case "/cadastroSessaoTeste":
-                request.getRequestDispatcher("/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
+                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
                         .forward(request, response);
-                break;
+                return;
 
             case "/executarSessaoTeste":
                 executarSessao(request, response);
-                request.getRequestDispatcher("/logado/testador/sessaoTeste/ExecutarSessaoTeste.jsp")
+                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
                         .forward(request, response);
                 break;
 
@@ -43,6 +43,10 @@ public class SessaoTesteController extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        String path = request.getPathInfo();
+//        response.getWriter().println("SessaoTesteController funcionando! Caminho: " + path);
+//    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
