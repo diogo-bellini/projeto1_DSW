@@ -12,10 +12,10 @@
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp">Cadastrar Sessão de Teste</a>
+    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/cadastroSessaoTeste">Cadastrar Sessão de Teste</a>
   </li>
   <li>
-    <a href="SessaoTesteController">Listar e executar Sessões de Teste</a>
+    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste">Listar e executar Sessões de Teste</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
