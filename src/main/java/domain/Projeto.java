@@ -1,9 +1,12 @@
 package domain;
 
+import java.time.LocalDate;
+
 public class Projeto {
     private Long id_projeto;
     private String nome;
     private String descricao;
+    private LocalDate dataCriacao;
 
     public Projeto() { }
 
@@ -34,5 +37,13 @@ public class Projeto {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }
