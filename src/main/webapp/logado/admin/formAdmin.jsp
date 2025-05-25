@@ -9,7 +9,7 @@
 <div align="center">
   <h1>Gerenciamento de Administradores</h1>
   <h2>
-    <a href="lista">Lista de Administradores</a>
+    <a href="lista-admins">Lista de Administradores</a>
   </h2>
 </div>
 <div align="center">

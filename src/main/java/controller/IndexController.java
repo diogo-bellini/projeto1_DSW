@@ -35,9 +35,9 @@ public class IndexController extends HttpServlet{
                         request.getSession().setAttribute("usuarioLogado", usuario);
                         response.sendRedirect(request.getContextPath() + "/home.jsp");
 //                        if (usuario.getPapel() == Papel.administrador) {
-//                            response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
+//                            response.sendRedirect(request.getContextPath() + "/logado/admin/index-admin.jsp");
 //                        } else {
-//                            response.sendRedirect(request.getContextPath() + "/logado/testador/index.jsp");
+//                            response.sendRedirect(request.getContextPath() + "/logado/testador/index-admin.jsp");
 //                        }
                         return;
                     } else {

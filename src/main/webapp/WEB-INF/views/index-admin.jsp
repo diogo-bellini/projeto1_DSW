@@ -14,7 +14,7 @@
     <a href="${pageContext.request.contextPath}">CRUD Testador</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/listaAdmin.jsp">CRUD Administrador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/lista-admins">CRUD Administrador</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}">Cadastrar Projeto</a>

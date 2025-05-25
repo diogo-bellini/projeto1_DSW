@@ -41,7 +41,7 @@ public class TestadorController extends HttpServlet {
 
         String action = request.getPathInfo();
         if (action == null || action.equals("/") || action.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/logado/testador/index.jsp");
+            request.getRequestDispatcher("/WEB-INF/views/index-testador.jsp").forward(request, response);
             return;
         }
 
@@ -57,7 +57,7 @@ public class TestadorController extends HttpServlet {
                     apresentaFormCadastro(request, response);
                     break;
                 default:
-                    response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/logado/admin/index-admin.jsp");
                     break;
             }
         } catch (Exception e) {
