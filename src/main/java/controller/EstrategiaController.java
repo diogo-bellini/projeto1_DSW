@@ -17,8 +17,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/logado/admin/estrategia/*")
+@WebServlet("/estrategia/*")
 public class EstrategiaController extends HttpServlet {
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = request.getPathInfo();
+
+        if (path == null || path.equals("/")) {
+            request.getRequestDispatcher("/WEB-INF/views/index-admin.jsp").forward(request, response);
+            return;
+        }
+
+        switch (path) {
+            case "/cadastroEstrategia":
+                request.getRequestDispatcher("/WEB-INF/views/logado/admin/estrategia/cadastroEstrategia.jsp")
+                        .forward(request, response);
+                return;
+
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getPathInfo();
@@ -28,7 +47,7 @@ public class EstrategiaController extends HttpServlet {
 
         try {
             switch (action) {
-                case "/cadastroEstrategia":
+                case "/cadastrarEstrategia":
                     insere(request, response);
                     break;
                 default:
@@ -50,10 +69,9 @@ public class EstrategiaController extends HttpServlet {
             EstrategiaDAO estrategia_dao = new EstrategiaDAO();
             estrategia_dao.cadastro(estrategia);
 
-            List<Estrategia> listaEstrategias = estrategia_dao.buscarTodas();
+            List<Estrategia> listaEstrategias = new ArrayList<>();
+            listaEstrategias = estrategia_dao.buscarTodas();
             getServletContext().setAttribute("listaEstrategias", listaEstrategias);
-
-            response.sendRedirect(request.getContextPath() + "/logado/admin/estrategia/cadastroEstrategia.jsp?sucesso=true");
 
         } catch (Exception e) {
             e.printStackTrace();
