@@ -27,7 +27,7 @@
         <p style="color: red;">${erro}</p>
     </c:if>
 
-    <form method="post" action="${pageContext.request.contextPath}/estrategias/cadastrar">
+    <form method="post" action="cadastroEstrategia">
         <label>
             <fmt:message key="campo.nome" />:
             <input type="text" name="nome" required>
