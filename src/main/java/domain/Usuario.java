@@ -3,18 +3,18 @@ package domain;
 import java.sql.Timestamp;
 
 public class Usuario {
-    private int id_usuario;
+    private Long id_usuario;
     private String nome;
     private String email;
     private String senha;
     private Papel papel;
     private Timestamp data_criacao;
 
-    public int getId_usuario() {
+    public Long getId_usuario() {
         return id_usuario;
     }
 
-    public void setId_usuario(int id_usuario) {
+    public void setId_usuario(Long id_usuario) {
         this.id_usuario = id_usuario;
     }
 

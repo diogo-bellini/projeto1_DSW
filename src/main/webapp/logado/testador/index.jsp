@@ -15,10 +15,10 @@
     <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp">Cadastrar Sessão de Teste</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
+    <a href="SessaoTesteController">Listar e executar Sessões de Teste</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste.jsp">Executar Sessões de Teste</a>
+    <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
   </li>
 
 </ul>

@@ -19,7 +19,8 @@
 
     <h1><fmt:message key="titulo.cadastro.sessao" /></h1>
 
-    <form action="cadastroSessaoTeste" method="post">
+    <form action="${pageContext.request.contextPath}/sessaoTesteController" method="post">
+        <input type="hidden" name="action" value="cadastrarSessao" />
         <label>
             <fmt:message key="campo.projeto" />:
             <select name="projetoId" required>

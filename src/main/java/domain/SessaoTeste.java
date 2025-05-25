@@ -4,46 +4,32 @@ import java.sql.Timestamp;
 
 public class SessaoTeste {
 
-    private int idSessao;
-    private String nomeSessao;
-    private Timestamp dataSessao;
-    private String descricaoSessao;
+    private Long idSessao;
+    private String descricao;
     private String nomeTestador;
     private Long estrategiaId;
-    private Long projetoId;
-    private int usuarioId;
     private int tempo;
+    private Long projetoId;
+    private Long usuarioId;
+    private Status status;
+    private Timestamp dataCriacao;
 
-    public int getIdSessao() {
+    // Getters e Setters
+
+    public Long getIdSessao() {
         return idSessao;
     }
 
-    public void setIdSessao(int idSessao) {
+    public void setIdSessao(Long idSessao) {
         this.idSessao = idSessao;
     }
 
-    public String getNomeSessao() {
-        return nomeSessao;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setNomeSessao(String nomeSessao) {
-        this.nomeSessao = nomeSessao;
-    }
-
-    public Timestamp getDataSessao() {
-        return dataSessao;
-    }
-
-    public void setDataSessao(Timestamp dataSessao) {
-        this.dataSessao = dataSessao;
-    }
-
-    public String getDescricaoSessao() {
-        return descricaoSessao;
-    }
-
-    public void setDescricaoSessao(String descricaoSessao) {
-        this.descricaoSessao = descricaoSessao;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public String getNomeTestador() {
@@ -62,6 +48,14 @@ public class SessaoTeste {
         this.estrategiaId = estrategiaId;
     }
 
+    public int getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
+    }
+
     public Long getProjetoId() {
         return projetoId;
     }
@@ -70,19 +64,27 @@ public class SessaoTeste {
         this.projetoId = projetoId;
     }
 
-    public int getUsuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(int usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public int getTempo() {
-        return tempo;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setTempo(int tempo) {
-        this.tempo = tempo;
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Timestamp getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(Timestamp dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 }
