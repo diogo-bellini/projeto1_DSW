@@ -57,7 +57,7 @@ public class AdminController extends HttpServlet{
 
         String action = request.getPathInfo();
         if (action == null || action.equals("/") || action.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
+            request.getRequestDispatcher("/WEB-INF/views/index-admin.jsp").forward(request, response);
             return;
         }
 
@@ -78,11 +78,11 @@ public class AdminController extends HttpServlet{
                 case "/atualizacao":
                     atualiza(request, response);
                     break;
-                case "/lista-administrador":
+                case "/lista-admins":
                     listaAdmins(request, response);
                     break;
                 default:
-                    response.sendRedirect(request.getContextPath() + "/logado/admin/index.jsp");
+                    request.getRequestDispatcher("/WEB-INF/views/index-admin.jsp").forward(request, response);
                     break;
             }
         } catch (Exception e) {
@@ -95,7 +95,8 @@ public class AdminController extends HttpServlet{
         listaAdmins.removeIf(u1 -> u1.getPapel() != Papel.administrador);
         request.setAttribute("listaAdmins", listaAdmins);
         request.setAttribute("contextPath", request.getContextPath().replace("/", ""));
-        request.getRequestDispatcher("/logado/admin/listaAdmin.jsp").forward(request, response);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/listaAdmin.jsp");
+        dispatcher.forward(request, response);
     }
 
     private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

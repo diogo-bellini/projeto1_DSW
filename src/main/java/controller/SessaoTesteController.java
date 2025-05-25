@@ -23,7 +23,7 @@ public class SessaoTesteController extends HttpServlet {
         String path = request.getPathInfo();
 
         if (path == null || path.equals("/")) {
-            response.sendRedirect(request.getContextPath() + "/logado/testador/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/logado/testador/index-admin.jsp");
             return;
         }
 

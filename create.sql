@@ -14,6 +14,12 @@ create table Projeto(id_projeto bigint not null auto_increment unique,
                      descricao text not null,
                      data_criacao timestamp default current_timestamp,
                      primary key(id_projeto));
+create table Estrategia(id_estrategia bigint not null auto_increment unique,
+                        primary key (id_estrategia),
+                        nome varchar(256) not null,
+                        descricao text,
+                        exemplo text,
+                        dica text);
 CREATE TABLE SessaoTeste (
                              id_sessao BIGINT NOT NULL AUTO_INCREMENT,
                              descricao TEXT NOT NULL,
@@ -34,12 +40,6 @@ create table UsuarioProjeto(usuario_id bigint not null,
                             primary key(usuario_id, projeto_id),
                             foreign key (usuario_id) references Usuario(id_usuario),
                             foreign key (projeto_id) references Projeto(id_projeto));
-create table Estrategia(id_estrategia bigint not null auto_increment unique,
-                        primary key (id_estrategia),
-                        nome varchar(256) not null,
-                        descricao text,
-                        exemplo text,
-                        dica text);
 create table Imagem(id_imagem bigint not null auto_increment unique,
                     primary key (id_imagem),
                     url varchar(256) not null,
