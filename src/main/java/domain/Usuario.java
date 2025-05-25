@@ -10,6 +10,27 @@ public class Usuario {
     private Papel papel;
     private Timestamp data_criacao;
 
+    public Usuario(int id) {
+        this.id_usuario = id;
+    }
+
+    public Usuario(String nome, String login, String senha, Papel papel) {
+        super();
+        this.nome = nome;
+        this.email = login;
+        this.senha = senha;
+        this.papel = papel;
+    }
+
+    public Usuario(int id, String nome, String login, String senha, Papel papel) {
+        super();
+        this.id_usuario = id;
+        this.nome = nome;
+        this.email = login;
+        this.senha = senha;
+        this.papel = papel;
+    }
+
     public int getId_usuario() {
         return id_usuario;
     }
@@ -26,11 +47,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getEmail() {
+    public String getLogin() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setLogin(String email) {
         this.email = email;
     }
 
