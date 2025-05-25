@@ -19,7 +19,8 @@
 
     <h1><fmt:message key="titulo.cadastro.sessao" /></h1>
 
-    <form action="CadastroSessaoTesteServlet" method="post">
+    <form action="${pageContext.request.contextPath}/sessaoTesteController" method="post">
+        <input type="hidden" name="action" value="cadastrarSessao" />
         <label>
             <fmt:message key="campo.projeto" />:
             <select name="projetoId" required>
@@ -33,7 +34,7 @@
         <label>
             <fmt:message key="campo.estrategia" />:
             <select name="estrategiaId" required>
-                <c:forEach var="e" items="${estrategias}">
+                <c:forEach var="e" items="${applicationScope.listaEstrategias}">
                     <option value="${e.id}">${e.nome}</option>
                 </c:forEach>
             </select>

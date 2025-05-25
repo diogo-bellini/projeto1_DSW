@@ -3,7 +3,10 @@ package dao;
 import domain.Estrategia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EstrategiaDAO extends GenericDAO {
 
@@ -18,7 +21,7 @@ public class EstrategiaDAO extends GenericDAO {
         String sql = "INSERT INTO Estrategia (nome, descricao, exemplo, dica) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, estrategia.getNome());
             stmt.setString(2, estrategia.getDescricao());
@@ -27,5 +30,27 @@ public class EstrategiaDAO extends GenericDAO {
 
             stmt.executeUpdate();
         }
+    }
+
+    public List<Estrategia> buscarTodas() throws SQLException {
+        List<Estrategia> estrategias = new ArrayList<>();
+        String sql = "SELECT id, nome, descricao, exemplo, dica FROM Estrategia";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Estrategia e = new Estrategia();
+                e.setid_estrategia(rs.getLong("id"));
+                e.setNome(rs.getString("nome"));
+                e.setDescricao(rs.getString("descricao"));
+                e.setExemplo(rs.getString("exemplo"));
+                e.setDica(rs.getString("dica"));
+
+                estrategias.add(e);
+            }
+        }
+        return estrategias;
     }
 }
