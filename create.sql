@@ -20,6 +20,17 @@ create table Estrategia(id_estrategia bigint not null auto_increment unique,
                         descricao text,
                         exemplo text,
                         dica text);
+create table UsuarioProjeto(usuario_id bigint not null,
+                            projeto_id bigint not null,
+                            primary key(usuario_id, projeto_id),
+                            foreign key (usuario_id) references Usuario(id_usuario),
+                            foreign key (projeto_id) references Projeto(id_projeto));
+create table Imagem(id_imagem bigint not null auto_increment unique,
+                    primary key (id_imagem),
+                    url varchar(256) not null,
+                    data_criacao timestamp default current_timestamp,
+                    estrategia_id bigint not null,
+                    foreign key(estrategia_id) references Estrategia(id_estrategia));
 CREATE TABLE SessaoTeste (
                              id_sessao BIGINT NOT NULL AUTO_INCREMENT,
                              descricao TEXT NOT NULL,
@@ -35,17 +46,6 @@ CREATE TABLE SessaoTeste (
                              FOREIGN KEY (projeto_id) REFERENCES Projeto(id_projeto),
                              FOREIGN KEY (usuario_id) REFERENCES Usuario(id_usuario)
 );
-create table UsuarioProjeto(usuario_id bigint not null,
-                            projeto_id bigint not null,
-                            primary key(usuario_id, projeto_id),
-                            foreign key (usuario_id) references Usuario(id_usuario),
-                            foreign key (projeto_id) references Projeto(id_projeto));
-create table Imagem(id_imagem bigint not null auto_increment unique,
-                    primary key (id_imagem),
-                    url varchar(256) not null,
-                    data_criacao timestamp default current_timestamp,
-                    estrategia_id bigint not null,
-                    foreign key(estrategia_id) references Estrategia(id_estrategia));
 create table Bug(id_bug bigint not null auto_increment unique,
                  primary key (id_bug),
                  descricao text,
