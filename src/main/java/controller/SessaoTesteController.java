@@ -40,9 +40,10 @@ public class SessaoTesteController extends HttpServlet {
                 break;
 
             case "/executarSessaoTeste":
-                executarSessao(request, response);
-                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
-                        .forward(request, response);
+                if (executarSessao(request, response)) {
+                    request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
+                            .forward(request, response);
+                }
                 break;
 
             default:
@@ -68,6 +69,10 @@ public class SessaoTesteController extends HttpServlet {
 
                 case "/adicionarBug":
                     adicionarBug(request, response);
+                    break;
+
+                case "/finalizarSessao":
+                    finalizarSessao(request, response);
                     break;
 
                 default:
@@ -135,15 +140,40 @@ public class SessaoTesteController extends HttpServlet {
         }
     }
 
-    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Long idSessao = Long.parseLong(request.getParameter("idSessao"));
+    private boolean executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            Long idSessao = Long.parseLong(request.getParameter("idSessao"));
 
-        SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
-        sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
-        SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
+            SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+            SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
 
-        request.setAttribute("sessao", sessao);
+            if (sessao.getStatus() == Status.finalizado) {
+                request.getSession().setAttribute("erro", "Sessão já finalizada. Não é possível executá-la novamente.");
+                response.sendRedirect(request.getContextPath() + "/logado/testador/sessaoTeste/listarSessaoTeste");
+                return false; // não continuar
+            }
+
+            if (sessao.getStatus() == Status.criado) {
+                sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
+                sessao.setStatus(Status.em_execucao);
+            }
+
+            BugDAO bugDAO = new BugDAO();
+            List<Bug> bugs = bugDAO.listarPorSessao(idSessao);
+
+            request.setAttribute("sessao", sessao);
+            request.setAttribute("bugs", bugs);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erro", "Erro ao executar sessão.");
+            request.getRequestDispatcher("erro.jsp").forward(request, response);
+            return false;
+        }
     }
+
+
 
     public void adicionarBug(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -156,35 +186,28 @@ public class SessaoTesteController extends HttpServlet {
             bug.setDataCriacao(new Timestamp(System.currentTimeMillis()));
 
             BugDAO bugDAO = new BugDAO();
-            Long idBug = bugDAO.cadastrar(bug);
-            bug.setIdBug(idBug);
+            bugDAO.cadastrar(bug);
 
-            // Formatar data em formato amigável
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String dataCriacaoFormatada = sdf.format(bug.getDataCriacao());
-
-            // Função para escapar aspas e caracteres especiais na descrição para JSON
-            String descricaoEscapada = descricao.replace("\\", "\\\\").replace("\"", "\\\"");
-
-            // Montar JSON manualmente
-            String json = String.format(
-                    "{\"idBug\": %d, \"descricao\": \"%s\", \"dataCriacao\": \"%s\"}",
-                    bug.getIdBug(),
-                    descricaoEscapada,
-                    dataCriacaoFormatada
-            );
-
-            System.out.println("JSON retornado: " + json);
-
-
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(json);
+            response.sendRedirect(request.getContextPath() + "/logado/testador/sessaoTeste/executarSessaoTeste?idSessao=" + sessaoId);
 
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao adicionar bug.");
         }
     }
+
+    private void finalizarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Long sessaoId = Long.parseLong(request.getParameter("idSessao"));
+            SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+            sessao_teste_dao.atualizarStatus(sessaoId, Status.finalizado);
+
+            response.sendRedirect(request.getContextPath() + "/logado/testador/sessaoTeste/listarSessaoTeste");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao finalizar sessão.");
+        }
+    }
+
 
 }

@@ -34,7 +34,7 @@ public class EstrategiaDAO extends GenericDAO {
 
     public List<Estrategia> buscarTodas() throws SQLException {
         List<Estrategia> estrategias = new ArrayList<>();
-        String sql = "SELECT id, nome, descricao, exemplo, dica FROM Estrategia";
+        String sql = "SELECT * FROM Estrategia";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);

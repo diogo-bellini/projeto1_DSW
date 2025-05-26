@@ -11,14 +11,23 @@
 <h2>Executando Sessão: ${sessao.descricao}</h2>
 <p><strong>Status atual:</strong> ${sessao.status}</p>
 
+<c:if test="${sessao.status ne 'finalizado'}">
+  <form method="post" action="${pageContext.request.contextPath}/logado/testador/sessaoTeste/finalizarSessao">
+    <input type="hidden" name="idSessao" value="${sessao.idSessao}" />
+    <button type="submit">Finalizar Sessão</button>
+  </form>
+</c:if>
+
 <h3>Adicionar novo bug</h3>
-<form id="formBug">
-  <input type="hidden" name="sessaoId" value="${sessao.idSessao}" id="sessaoId"/>
-  <textarea name="descricao" id="descricao" rows="4" cols="50" placeholder="Descreva o bug aqui..." required></textarea><br/>
+<form method="post" action="${pageContext.request.contextPath}/logado/testador/sessaoTeste/adicionarBug">
+  <input type="hidden" name="sessaoId" value="${sessao.idSessao}"/>
+  <textarea name="descricao" rows="4" cols="50" placeholder="Descreva o bug aqui..." required></textarea><br/>
   <button type="submit">Adicionar Bug</button>
 </form>
 
-<div id="mensagemBug" style="color: green; margin-top: 10px;"></div>
+<c:if test="${not empty mensagemSucesso}">
+  <div style="color: green; margin-top: 10px;">${mensagemSucesso}</div>
+</c:if>
 
 <ul id="listaBugs">
   <c:forEach var="bug" items="${bugs}">
@@ -28,39 +37,6 @@
     </li>
   </c:forEach>
 </ul>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function () {
-    $("#formBug").submit(function (e) {
-      e.preventDefault();
-
-      const descricao = $("#descricao").val().trim();
-      if (descricao === "") return;
-
-      $.ajax({
-        type: "POST",
-        url: "${pageContext.request.contextPath}/sessaoTeste/adicionarBug",
-        data: {
-          sessaoId: $("#sessaoId").val(),
-          descricao: descricao
-        },
-        dataType: 'json',
-        success: function (data) {
-          console.log("Resposta do servidor:", data);
-          $("#mensagemBug").text("Bug adicionado com sucesso!").css("color", "green");
-          $("#descricao").val("");
-
-          const bugItem = `<li data-id="${data.idBug}">${data.descricao} (Registrado em: ${data.dataCriacao})</li>`;
-          $("#listaBugs").append(bugItem);
-        },
-        error: function () {
-          $("#mensagemBug").text("Erro ao adicionar bug.").css("color", "red");
-        }
-      });
-    });
-  });
-</script>
 
 </body>
 </html>
