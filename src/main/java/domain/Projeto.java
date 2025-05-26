@@ -1,12 +1,12 @@
 package domain;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
 public class Projeto {
     private Long id_projeto;
     private String nome;
     private String descricao;
-    private LocalDate dataCriacao;
+    private Timestamp dataCriacao;
 
     public Projeto() { }
 
@@ -15,12 +15,13 @@ public class Projeto {
         this.descricao = descricao;
     }
 
-    public Long getId() {
+    // Getters e Setters
+    public Long getId_projeto() {
         return id_projeto;
     }
 
-    public void setId(Long id) {
-        this.id_projeto = id;
+    public void setId_projeto(Long id_projeto) {
+        this.id_projeto = id_projeto;
     }
 
     public String getNome() {
@@ -39,11 +40,11 @@ public class Projeto {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataCriacao() {
+    public Timestamp getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao(Timestamp dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
 }

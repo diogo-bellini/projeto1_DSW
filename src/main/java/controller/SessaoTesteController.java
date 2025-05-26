@@ -1,18 +1,15 @@
 package controller;
 
 import dao.BugDAO;
+import dao.ProjetoDAO;
 import dao.SessaoTesteDAO;
-import domain.Bug;
-import domain.SessaoTeste;
-import domain.Status;
-import domain.Usuario;
+import domain.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -84,15 +81,26 @@ public class SessaoTesteController extends HttpServlet {
     private void insere(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
-
             Long usuarioId = usuario.getId_usuario();
             String nomeTestador = usuario.getNome();
+
+            // Verificar se o projeto existe
+            Long projetoId = Long.parseLong(request.getParameter("projetoId"));
+            ProjetoDAO projetoDAO = new ProjetoDAO();
+            Projeto projeto = projetoDAO.buscarPorId(projetoId);
+
+            if (projeto == null) {
+                request.setAttribute("erro", "Projeto não encontrado.");
+                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
+                        .forward(request, response);
+                return;
+            }
 
             SessaoTeste sessao = new SessaoTeste();
             sessao.setDescricao(request.getParameter("descricao"));
             sessao.setTempo(Integer.parseInt(request.getParameter("tempo")));
             sessao.setEstrategiaId(Long.parseLong(request.getParameter("estrategiaId")));
-            sessao.setProjetoId(Long.parseLong(request.getParameter("projetoId")));
+            sessao.setProjetoId(projetoId);
             sessao.setUsuarioId(usuarioId);
             sessao.setNomeTestador(nomeTestador);
             sessao.setStatus(Status.criado);
@@ -100,10 +108,13 @@ public class SessaoTesteController extends HttpServlet {
 
             SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
             Long sessaoId = sessao_teste_dao.cadastrar(sessao);
+
+            response.sendRedirect(request.getContextPath() + "/sessaoTeste/listarSessaoTeste");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("erro", "Erro ao cadastrar sessão.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
+            request.setAttribute("erro", "Erro ao cadastrar sessão: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
+                    .forward(request, response);
         }
     }
 
