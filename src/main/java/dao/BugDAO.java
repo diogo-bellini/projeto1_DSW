@@ -18,11 +18,8 @@ public class BugDAO extends GenericDAO{
 
             stmt.setString(1, bug.getDescricao());
             stmt.setLong(2, bug.getSessaoId());
-            int affectedRows = stmt.executeUpdate();
+            stmt.executeUpdate();
 
-            if (affectedRows == 0) {
-                throw new SQLException("Falha ao inserir bug, nenhuma linha afetada.");
-            }
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {

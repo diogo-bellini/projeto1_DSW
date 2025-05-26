@@ -33,12 +33,8 @@ public class IndexController extends HttpServlet{
                 if (usuario != null) {
                     if (usuario.getSenha().equals(senha)) {
                         request.getSession().setAttribute("usuarioLogado", usuario);
-                        response.sendRedirect(request.getContextPath() + "/home.jsp");
-//                        if (usuario.getPapel() == Papel.administrador) {
-//                            response.sendRedirect(request.getContextPath() + "/logado/admin/index-admin.jsp");
-//                        } else {
-//                            response.sendRedirect(request.getContextPath() + "/logado/testador/index-admin.jsp");
-//                        }
+                        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/home.jsp");
+                        rd.forward(request, response);
                         return;
                     } else {
                         erros.add("Senha inválida!");
