@@ -43,9 +43,10 @@ public class SessaoTesteController extends HttpServlet {
                 break;
 
             case "/executarSessaoTeste":
-                executarSessao(request, response);
-                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
-                        .forward(request, response);
+                if (executarSessao(request, response)) {
+                    request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
+                            .forward(request, response);
+                }
                 break;
 
             default:
@@ -128,25 +129,39 @@ public class SessaoTesteController extends HttpServlet {
         }
     }
 
-    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private boolean executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             Long idSessao = Long.parseLong(request.getParameter("idSessao"));
 
             SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
-            sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
             SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
 
+            if (sessao.getStatus() == Status.finalizado) {
+                request.getSession().setAttribute("erro", "Sessão já finalizada. Não é possível executá-la novamente.");
+                response.sendRedirect(request.getContextPath() + "/logado/testador/sessaoTeste/listarSessaoTeste");
+                return false; // não continuar
+            }
+
+            if (sessao.getStatus() == Status.criado) {
+                sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
+                sessao.setStatus(Status.em_execucao);
+            }
+
             BugDAO bugDAO = new BugDAO();
-            List<Bug> bugs = bugDAO.listarPorSessao(idSessao); // Aqui está a correção
+            List<Bug> bugs = bugDAO.listarPorSessao(idSessao);
 
             request.setAttribute("sessao", sessao);
-            request.setAttribute("bugs", bugs); // Adiciona à requisição
+            request.setAttribute("bugs", bugs);
+
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("erro", "Erro ao executar sessão.");
             request.getRequestDispatcher("erro.jsp").forward(request, response);
+            return false;
         }
     }
+
 
 
     public void adicionarBug(HttpServletRequest request, HttpServletResponse response) throws IOException {
