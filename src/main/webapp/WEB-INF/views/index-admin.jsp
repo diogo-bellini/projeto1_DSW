@@ -7,20 +7,20 @@
   <title>Menu do Sistema</title>
 </head>
 <body>
-<h1>Página do Administrador</h1>
+<h1>Administração</h1>
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/lista-testador">CRUD Testador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/lista-testador">Gerenciar Testadores</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/lista-admin">CRUD Administrador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/lista-admin">Gerenciar Administradores</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/projeto/cadastroProjeto">Cadastrar Projeto</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/projeto/cadastroProjeto">Cadastro de Projetos</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia">Cadastrar Estratégia</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia">Cadastro de Estratégias</a>
   </li>
 
   <li>

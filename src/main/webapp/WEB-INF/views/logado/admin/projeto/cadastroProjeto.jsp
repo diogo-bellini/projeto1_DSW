@@ -38,7 +38,7 @@
     </div>
 
     <button type="submit">Cadastrar</button>
-    <a href="${contextPath}/logado/admin/projeto/listarProjetos">Cancelar</a>
+    <a href="${contextPath}/logado/admin/projeto/listarProjetos">Exibir projetos</a>
 </form>
 </body>
 </html>
