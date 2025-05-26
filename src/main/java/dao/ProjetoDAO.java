@@ -46,12 +46,28 @@ public class ProjetoDAO extends GenericDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Projeto projeto = new Projeto();
-                projeto.setId_projeto(rs.getLong("id_projeto"));
-                projeto.setNome(rs.getString("nome"));
-                projeto.setDescricao(rs.getString("descricao"));
-                projeto.setDataCriacao(rs.getTimestamp("data_criacao"));
+                Projeto projeto = criarProjetoFromResultSet(rs);
                 projetos.add(projeto);
+            }
+        }
+        return projetos;
+    }
+
+    public List<Projeto> listarPorUsuario(Long usuarioId) throws SQLException {
+        List<Projeto> projetos = new ArrayList<>();
+        String sql = "SELECT p.* FROM Projeto p " +
+                "JOIN UsuarioProjeto up ON p.id_projeto = up.projeto_id " +
+                "WHERE up.usuario_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Projeto projeto = criarProjetoFromResultSet(rs);
+                    projetos.add(projeto);
+                }
             }
         }
         return projetos;
@@ -76,11 +92,7 @@ public class ProjetoDAO extends GenericDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Projeto projeto = new Projeto();
-                projeto.setId_projeto(rs.getLong("id_projeto"));
-                projeto.setNome(rs.getString("nome"));
-                projeto.setDescricao(rs.getString("descricao"));
-                projeto.setDataCriacao(rs.getTimestamp("data_criacao"));
+                Projeto projeto = criarProjetoFromResultSet(rs);
                 projetos.add(projeto);
             }
         }
@@ -96,12 +108,7 @@ public class ProjetoDAO extends GenericDAO {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Projeto projeto = new Projeto();
-                    projeto.setId_projeto(rs.getLong("id_projeto"));
-                    projeto.setNome(rs.getString("nome"));
-                    projeto.setDescricao(rs.getString("descricao"));
-                    projeto.setDataCriacao(rs.getTimestamp("data_criacao"));
-                    return projeto;
+                    return criarProjetoFromResultSet(rs);
                 }
             }
         }
@@ -122,6 +129,10 @@ public class ProjetoDAO extends GenericDAO {
     }
 
     public void remover(Long id) throws SQLException {
+        // Primeiro remove as associações com usuários
+        removerAssociacoesUsuario(id);
+
+        // Depois remove o projeto
         String sql = "DELETE FROM Projeto WHERE id_projeto = ?";
 
         try (Connection conn = getConnection();
@@ -130,5 +141,55 @@ public class ProjetoDAO extends GenericDAO {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         }
+    }
+
+    public void associarUsuario(Long projetoId, Long usuarioId) throws SQLException {
+        String sql = "INSERT INTO UsuarioProjeto (usuario_id, projeto_id) VALUES (?, ?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, usuarioId);
+            stmt.setLong(2, projetoId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void removerAssociacoesUsuario(Long projetoId) throws SQLException {
+        String sql = "DELETE FROM UsuarioProjeto WHERE projeto_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, projetoId);
+            stmt.executeUpdate();
+        }
+    }
+
+    public boolean usuarioTemAcesso(Long projetoId, Long usuarioId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM UsuarioProjeto " +
+                "WHERE projeto_id = ? AND usuario_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, projetoId);
+            stmt.setLong(2, usuarioId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Projeto criarProjetoFromResultSet(ResultSet rs) throws SQLException {
+        Projeto projeto = new Projeto();
+        projeto.setId_projeto(rs.getLong("id_projeto"));
+        projeto.setNome(rs.getString("nome"));
+        projeto.setDescricao(rs.getString("descricao"));
+        projeto.setDataCriacao(rs.getTimestamp("data_criacao"));
+        return projeto;
     }
 }

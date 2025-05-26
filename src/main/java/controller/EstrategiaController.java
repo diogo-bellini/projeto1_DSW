@@ -68,7 +68,7 @@ public class EstrategiaController extends HttpServlet {
             estrategia.setDica(request.getParameter("dica"));
 
             EstrategiaDAO estrategia_dao = new EstrategiaDAO();
-            estrategia_dao.cadastro(estrategia);
+            estrategia_dao.cadastrar(estrategia);
 
             List<Estrategia>listaEstrategias = estrategia_dao.buscarTodas();
             getServletContext().setAttribute("listaEstrategias", listaEstrategias);
