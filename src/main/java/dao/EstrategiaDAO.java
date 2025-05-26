@@ -10,14 +10,11 @@ import java.util.List;
 
 public class EstrategiaDAO extends GenericDAO {
 
-    private Connection conexao;
-
     public EstrategiaDAO() {
         super();
     }
 
-    public void cadastro(Estrategia estrategia) throws SQLException {
-
+    public void cadastrar(Estrategia estrategia) throws SQLException {
         String sql = "INSERT INTO Estrategia (nome, descricao, exemplo, dica) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
@@ -42,7 +39,7 @@ public class EstrategiaDAO extends GenericDAO {
 
             while (rs.next()) {
                 Estrategia e = new Estrategia();
-                e.setid_estrategia(rs.getLong("id"));
+                e.setId_estrategia(rs.getLong("id_estrategia"));
                 e.setNome(rs.getString("nome"));
                 e.setDescricao(rs.getString("descricao"));
                 e.setExemplo(rs.getString("exemplo"));

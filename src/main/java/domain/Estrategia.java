@@ -52,6 +52,11 @@ public class Estrategia {
     public void setDica(String dica) {
         this.dica = dica;
     }
+
+    public void setId_estrategia(long idEstrategia) {
+        Estrategia estrategia = this;
+        estrategia.id_estrategia = idEstrategia;
+    }
 }
 
 

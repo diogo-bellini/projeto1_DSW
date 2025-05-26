@@ -17,11 +17,12 @@
     <a href="${pageContext.request.contextPath}/logado/admin/lista-admin">CRUD Administrador</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}">Cadastrar Projeto</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/projeto/cadastroProjeto">Cadastrar Projeto</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logado/admin/estrategia/cadastroEstrategia">Cadastrar Estratégia</a>
   </li>
+
   <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
   </li>
