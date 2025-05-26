@@ -1,6 +1,8 @@
 package controller;
 
+import dao.BugDAO;
 import dao.SessaoTesteDAO;
+import domain.Bug;
 import domain.SessaoTeste;
 import domain.Status;
 import domain.Usuario;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,7 +134,46 @@ public class SessaoTesteController extends HttpServlet {
         request.setAttribute("sessao", sessao);
     }
 
-    public void adicionarBug(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void adicionarBug(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Long sessaoId = Long.parseLong(request.getParameter("sessaoId"));
+            String descricao = request.getParameter("descricao");
 
+            Bug bug = new Bug();
+            bug.setDescricao(descricao);
+            bug.setSessaoId(sessaoId);
+            bug.setDataCriacao(new Timestamp(System.currentTimeMillis()));
+
+            BugDAO bugDAO = new BugDAO();
+            Long idBug = bugDAO.cadastrar(bug);
+            bug.setIdBug(idBug);
+
+            // Formatar data em formato amigável
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataCriacaoFormatada = sdf.format(bug.getDataCriacao());
+
+            // Função para escapar aspas e caracteres especiais na descrição para JSON
+            String descricaoEscapada = descricao.replace("\\", "\\\\").replace("\"", "\\\"");
+
+            // Montar JSON manualmente
+            String json = String.format(
+                    "{\"idBug\": %d, \"descricao\": \"%s\", \"dataCriacao\": \"%s\"}",
+                    bug.getIdBug(),
+                    descricaoEscapada,
+                    dataCriacaoFormatada
+            );
+
+            System.out.println("JSON retornado: " + json);
+
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao adicionar bug.");
+        }
     }
+
 }
