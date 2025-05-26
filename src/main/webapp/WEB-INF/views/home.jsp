@@ -10,20 +10,17 @@
 
 <html>
 <head>
-    <title>Title</title>
+  <title>Title</title>
 </head>
 <body>
-      <h1>Usuário Logado</h1>
-      <a href="${pageContext.request.contextPath}/logado/testador">Página do Testador</a><br>
-      <a href="${pageContext.request.contextPath}/logado/admin">Página do Admin</a><br><br>
-      Email:${sessionScope.usuarioLogado.email}
-      Senha:${sessionScope.usuarioLogado.senha}
-      Papel:${sessionScope.usuarioLogado.papel}
+<h1>Usuário Logado</h1>
+<a href="${pageContext.request.contextPath}/logado/testador">Sessão de testes</a><br>
+<a href="${pageContext.request.contextPath}/logado/admin">Administração</a><br><br>
 
-      <ul>
-            <c:forEach var="estrategia" items="${applicationScope.listaEstrategias}">
-                  <li>${estrategia.nome}</li>
-            </c:forEach>
-      </ul>
+<ul>
+  <c:forEach var="estrategia" items="${applicationScope.listaEstrategias}">
+    <li>${estrategia.nome}</li>
+  </c:forEach>
+</ul>
 </body>
 </html>
