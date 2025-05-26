@@ -61,6 +61,12 @@ public class AdminController extends HttpServlet{
             return;
         }
 
+        if (action.startsWith("/estrategia")) {
+            RequestDispatcher rd = request.getRequestDispatcher("/estrategia" + action.substring("/estrategia".length()));
+            rd.forward(request, response);
+            return;
+        }
+
         try {
             switch (action) {
                 case "/cadastro":
