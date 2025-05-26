@@ -66,8 +66,8 @@ public class SessaoTesteController extends HttpServlet {
                     insere(request, response);
                     break;
 
-                case "/executarSessao":
-                    executarSessao(request, response);
+                case "/adicionarBug":
+                    adicionarBug(request, response);
                     break;
 
                 default:
@@ -129,5 +129,9 @@ public class SessaoTesteController extends HttpServlet {
         SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
 
         request.setAttribute("sessao", sessao);
+    }
+
+    public void adicionarBug(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
     }
 }
