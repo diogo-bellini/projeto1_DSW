@@ -87,7 +87,13 @@ public class ProjetoController extends HttpServlet {
         try {
             String ordem = request.getParameter("ordem");
             ProjetoDAO dao = new ProjetoDAO();
-            List<Projeto> projetos = (ordem != null) ? dao.listarOrdenado(ordem) : dao.listar();
+            List<Projeto> projetos;
+
+            if (ordem != null && !ordem.trim().isEmpty()) {
+                projetos = dao.listarOrdenado(ordem);
+            } else {
+                projetos = dao.listarOrdenado("data"); // padrão: mais recente primeiro
+            }
 
             request.setAttribute("projetos", projetos);
             request.getRequestDispatcher("/WEB-INF/views/logado/admin/projeto/listarProjetos.jsp")

@@ -47,4 +47,29 @@ public class Projeto {
     public void setDataCriacao(Timestamp dataCriacao) {
         this.dataCriacao = dataCriacao;
     }
+
+    @Override
+    public String toString() {
+        return "Projeto{" +
+                "id_projeto=" + id_projeto +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", dataCriacao=" + dataCriacao +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Projeto projeto = (Projeto) o;
+
+        return id_projeto != null ? id_projeto.equals(projeto.id_projeto) : projeto.id_projeto == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id_projeto != null ? id_projeto.hashCode() : 0;
+    }
 }

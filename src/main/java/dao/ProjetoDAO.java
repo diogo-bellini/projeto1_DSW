@@ -79,7 +79,13 @@ public class ProjetoDAO extends GenericDAO {
 
         switch (ordem) {
             case "nome":
-                sql += "nome";
+                sql += "nome ASC";
+                break;
+            case "nome_desc":
+                sql += "nome DESC";
+                break;
+            case "data_asc":
+                sql += "data_criacao ASC";
                 break;
             case "data":
             default:
