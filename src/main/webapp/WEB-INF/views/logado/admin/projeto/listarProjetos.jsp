@@ -25,6 +25,8 @@
     <div class="project-card">
       <h3>${projeto.nome}</h3>
       <p>${projeto.descricao}</p>
+      <p><strong>Criado em:</strong> <fmt:formatDate value="${projeto.dataCriacao}" pattern="dd/MM/yyyy HH:mm"/></p>
+
       <div class="project-actions">
         <a href="${contextPath}/logado/admin/projeto/editarProjeto?id=${projeto.id_projeto}"
            class="btn btn-warning">Editar</a>

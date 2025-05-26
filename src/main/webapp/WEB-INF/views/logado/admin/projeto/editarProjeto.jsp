@@ -28,6 +28,18 @@
         <textarea id="descricao" name="descricao" required>${projeto.descricao}</textarea>
     </div>
 
+    <div>
+        <h3>Usuários Associados</h3>
+        <c:forEach var="usuario" items="${usuarios}">
+            <div>
+                <input type="checkbox" id="usuario_${usuario.id_usuario}" name="usuarios"
+                       value="${usuario.id_usuario}"
+                       <c:if test="${usuariosAssociados.contains(usuario.id_usuario)}">checked</c:if>>
+                <label for="usuario_${usuario.id_usuario}">${usuario.nome} (${usuario.email}) - ${usuario.papel}</label>
+            </div>
+        </c:forEach>
+    </div>
+
     <button type="submit">Atualizar</button>
     <a href="${contextPath}/logado/admin/projeto/listarProjetos">Cancelar</a>
 </form>

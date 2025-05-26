@@ -1,7 +1,10 @@
 package controller;
 
 import dao.ProjetoDAO;
+import dao.UsuarioDAO;
+import dao.UsuarioProjetoDAO;
 import domain.Projeto;
+import domain.Usuario;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,8 +27,7 @@ public class ProjetoController extends HttpServlet {
 
         switch (path) {
             case "/cadastroProjeto":
-                request.getRequestDispatcher("/WEB-INF/views/logado/admin/projeto/cadastroProjeto.jsp")
-                        .forward(request, response);
+                mostrarFormCadastro(request, response);
                 return;
 
             case "/listarProjetos":
@@ -69,6 +71,18 @@ public class ProjetoController extends HttpServlet {
         }
     }
 
+    private void mostrarFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            List<Usuario> usuarios = usuarioDAO.getAll();
+            request.setAttribute("usuarios", usuarios);
+            request.getRequestDispatcher("/WEB-INF/views/logado/admin/projeto/cadastroProjeto.jsp")
+                    .forward(request, response);
+        } catch (Exception e) {
+            throw new ServletException("Erro ao carregar formulário de cadastro", e);
+        }
+    }
+
     private void listarProjetos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String ordem = request.getParameter("ordem");
@@ -89,8 +103,17 @@ public class ProjetoController extends HttpServlet {
             projeto.setNome(request.getParameter("nome"));
             projeto.setDescricao(request.getParameter("descricao"));
 
-            ProjetoDAO dao = new ProjetoDAO();
-            dao.cadastrar(projeto);
+            ProjetoDAO projetoDAO = new ProjetoDAO();
+            Long projetoId = projetoDAO.cadastrar(projeto);
+
+            // Associar usuários selecionados ao projeto
+            String[] usuariosIds = request.getParameterValues("usuarios");
+            if (usuariosIds != null) {
+                UsuarioProjetoDAO usuarioProjetoDAO = new UsuarioProjetoDAO();
+                for (String usuarioId : usuariosIds) {
+                    usuarioProjetoDAO.associarUsuarioProjeto(Long.parseLong(usuarioId), projetoId);
+                }
+            }
 
             response.sendRedirect(request.getContextPath() + "/logado/admin/projeto/listarProjetos");
         } catch (SQLException e) {
@@ -101,15 +124,23 @@ public class ProjetoController extends HttpServlet {
     private void apresentarFormEdicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Long id = Long.parseLong(request.getParameter("id"));
-            ProjetoDAO dao = new ProjetoDAO();
-            Projeto projeto = dao.buscarPorId(id);
+            ProjetoDAO projetoDAO = new ProjetoDAO();
+            Projeto projeto = projetoDAO.buscarPorId(id);
 
             if (projeto == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
             }
 
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            List<Usuario> usuarios = usuarioDAO.getAll();
+
+            UsuarioProjetoDAO usuarioProjetoDAO = new UsuarioProjetoDAO();
+            List<Long> usuariosAssociados = usuarioProjetoDAO.getUsuariosAssociados(id);
+
             request.setAttribute("projeto", projeto);
+            request.setAttribute("usuarios", usuarios);
+            request.setAttribute("usuariosAssociados", usuariosAssociados);
             request.getRequestDispatcher("/WEB-INF/views/logado/admin/projeto/editarProjeto.jsp")
                     .forward(request, response);
         } catch (SQLException e) {
@@ -119,13 +150,25 @@ public class ProjetoController extends HttpServlet {
 
     private void atualizarProjeto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            Long projetoId = Long.parseLong(request.getParameter("id"));
             Projeto projeto = new Projeto();
-            projeto.setId_projeto(Long.parseLong(request.getParameter("id")));
+            projeto.setId_projeto(projetoId);
             projeto.setNome(request.getParameter("nome"));
             projeto.setDescricao(request.getParameter("descricao"));
 
-            ProjetoDAO dao = new ProjetoDAO();
-            dao.atualizar(projeto);
+            ProjetoDAO projetoDAO = new ProjetoDAO();
+            projetoDAO.atualizar(projeto);
+
+            // Atualizar associações com usuários
+            UsuarioProjetoDAO usuarioProjetoDAO = new UsuarioProjetoDAO();
+            usuarioProjetoDAO.removerAssociacoesProjeto(projetoId);
+
+            String[] usuariosIds = request.getParameterValues("usuarios");
+            if (usuariosIds != null) {
+                for (String usuarioId : usuariosIds) {
+                    usuarioProjetoDAO.associarUsuarioProjeto(Long.parseLong(usuarioId), projetoId);
+                }
+            }
 
             response.sendRedirect(request.getContextPath() + "/logado/admin/projeto/listarProjetos");
         } catch (SQLException e) {

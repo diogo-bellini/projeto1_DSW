@@ -27,6 +27,16 @@
         <textarea id="descricao" name="descricao" required></textarea>
     </div>
 
+    <div>
+        <h3>Usuários Associados</h3>
+        <c:forEach var="usuario" items="${usuarios}">
+            <div>
+                <input type="checkbox" id="usuario_${usuario.id_usuario}" name="usuarios" value="${usuario.id_usuario}">
+                <label for="usuario_${usuario.id_usuario}">${usuario.nome} (${usuario.email}) - ${usuario.papel}</label>
+            </div>
+        </c:forEach>
+    </div>
+
     <button type="submit">Cadastrar</button>
     <a href="${contextPath}/logado/admin/projeto/listarProjetos">Cancelar</a>
 </form>
