@@ -1,10 +1,10 @@
 # Sistema de Apoio a Testes Exploratório em Video Games
 
 **Desenvolvimento de Software para a Web 1**  
-Diogo Conforti Vaz Bellini
-João Paulo Morais Rangel
-Luiz Fellipe de Lima Barbosa
-Pedro Vinicius Ferreira Santos
+Diogo Conforti Vaz Bellini<br>
+João Paulo Morais Rangel<br>
+Luiz Fellipe de Lima Barbosa<br>
+Pedro Vinicius Ferreira Santos<br>
 
 ---
 
@@ -33,6 +33,8 @@ Pedro Vinicius Ferreira Santos
    ```bash
    mysql -u root -p
    mysql> source <caminho_para_projeto>/projeto1_DSW/create.sql;
+
+Obs: crie um administrador direto no banco para conseguir se logar pela primeira vez.
 
 3. Suba o Apache Tomacat
 4. Dentro da pasta do projeto
