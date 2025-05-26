@@ -49,7 +49,8 @@ public class EstrategiaController extends HttpServlet {
             switch (action) {
                 case "/cadastrarEstrategia":
                     insere(request, response);
-                    break;
+                    return;
+
                 default:
                     break;
             }
@@ -69,9 +70,11 @@ public class EstrategiaController extends HttpServlet {
             EstrategiaDAO estrategia_dao = new EstrategiaDAO();
             estrategia_dao.cadastro(estrategia);
 
-            List<Estrategia> listaEstrategias = new ArrayList<>();
-            listaEstrategias = estrategia_dao.buscarTodas();
+            List<Estrategia>listaEstrategias = estrategia_dao.buscarTodas();
             getServletContext().setAttribute("listaEstrategias", listaEstrategias);
+
+            request.getRequestDispatcher("/WEB-INF/views/listaEstrategia.jsp").
+                    forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
