@@ -15,9 +15,9 @@ abstract public class GenericDAO {
     }
 
     public Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://127.0.0.1:3306/TestesBD";
+        String url = "jdbc:mysql://127.0.0.1:3306/TesteBD?useSSL=false&serverTimezone=America/Sao_Paulo";
         String user = "root";
-        String password = "root";
+        String password = "1234";
 
         return DriverManager.getConnection(url, user, password);
     }

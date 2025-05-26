@@ -81,8 +81,8 @@
         <version>2.2</version>
         <configuration>
           <url>http://localhost:8080/manager/text</url>
-          <server>Tomcat11</server>
-          <path>/${project.artifactId}</path>
+          <server>TomcatServer</server>
+          <path>/projeto1_DSW</path>
         </configuration>
       </plugin>
       <plugin>
@@ -96,8 +96,6 @@
               <goal>native2ascii</goal>
             </goals>
             <configuration>
-              <dest>${project.build.directory}/classes</dest>
-              <src>${project.resources[0].directory}</src>
               <encoding>UTF-8</encoding>
             </configuration>
           </execution>
@@ -136,6 +134,7 @@
           <version>3.1.2</version>
         </plugin>
       </plugins>
+
     </pluginManagement>
   </build>
 </project>
