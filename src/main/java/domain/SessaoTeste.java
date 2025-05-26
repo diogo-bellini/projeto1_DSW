@@ -14,8 +14,6 @@ public class SessaoTeste {
     private Status status;
     private Timestamp dataCriacao;
 
-    // Getters e Setters
-
     public Long getIdSessao() {
         return idSessao;
     }

@@ -33,8 +33,13 @@ public class SessaoTesteController extends HttpServlet {
                         .forward(request, response);
                 return;
 
+            case "/listarSessaoTeste":
+                listarSessao(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/listarSessaoTeste.jsp")
+                        .forward(request, response);
+                break;
+
             case "/executarSessaoTeste":
-                executarSessao(request, response);
                 request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
                         .forward(request, response);
                 break;
@@ -60,7 +65,7 @@ public class SessaoTesteController extends HttpServlet {
                     insere(request, response);
                     break;
 //                case "/executarSessao":
-//                    executar(request, response);
+//                    executarSessao(request, response);
                 default:
                     break;
             }
@@ -96,7 +101,7 @@ public class SessaoTesteController extends HttpServlet {
     }
 
 
-    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void listarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
             Long usuarioId = usuario.getId_usuario();
