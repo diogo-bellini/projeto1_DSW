@@ -11,10 +11,10 @@
 <p>Olá ${sessionScope.usuarioLogado.nome}</p>
 <ul>
   <li>
-    <a href="${pageContext.request.contextPath}">CRUD Testador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/lista-testador">CRUD Testador</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/admin/lista-admins">CRUD Administrador</a>
+    <a href="${pageContext.request.contextPath}/logado/admin/lista-admin">CRUD Administrador</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logado/admin/projeto/cadastroProjeto">Cadastrar Projeto</a>
