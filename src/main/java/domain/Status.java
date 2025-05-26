@@ -8,7 +8,7 @@ public enum Status {
     public String toString() {
         switch (this) {
             case criado: return "criado";
-            case em_execucao: return "em execucao";
+            case em_execucao: return "em_execucao";
             case finalizado: return "finalizado";
             default: throw new IllegalArgumentException();
         }
@@ -17,7 +17,7 @@ public enum Status {
     public static Status fromString(String status) {
         switch (status.toLowerCase()) {
             case "criado": return criado;
-            case "em execucao": return em_execucao;
+            case "em_execucao": return em_execucao;
             case "finalizado": return finalizado;
             default: throw new IllegalArgumentException("Status desconhecido: " + status);
         }

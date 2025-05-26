@@ -21,7 +21,7 @@
         <p><strong>Data:</strong> ${sessao.dataCriacao}</p>
         <p><strong>Tempo:</strong> ${sessao.tempo} minutos</p>
         <p><strong>Status:</strong> ${sessao.status}</p>
-        <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste">Executar</a>
+        <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste?idSessao=${sessao.idSessao}">Executar</a>
         <hr>
     </div>
 </c:forEach>

@@ -12,5 +12,7 @@
 </head>
 <body>
       <h1>Página de Execução de Teste</h1>
+      <h2>Executando Sessão: ${sessao.descricao}</h2>
+      <p><strong>Status atual:</strong> ${sessao.status}</p>
 </body>
 </html>

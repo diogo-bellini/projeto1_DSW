@@ -40,6 +40,7 @@ public class SessaoTesteController extends HttpServlet {
                 break;
 
             case "/executarSessaoTeste":
+                executarSessao(request, response);
                 request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
                         .forward(request, response);
                 break;
@@ -64,8 +65,11 @@ public class SessaoTesteController extends HttpServlet {
                 case "/cadastrarSessao":
                     insere(request, response);
                     break;
-//                case "/executarSessao":
-//                    executarSessao(request, response);
+
+                case "/executarSessao":
+                    executarSessao(request, response);
+                    break;
+
                 default:
                     break;
             }
@@ -115,5 +119,15 @@ public class SessaoTesteController extends HttpServlet {
             request.setAttribute("erro", "Erro ao cadastrar sessão.");
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
+    }
+
+    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Long idSessao = Long.parseLong(request.getParameter("idSessao"));
+
+        SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+        sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
+        SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
+
+        request.setAttribute("sessao", sessao);
     }
 }

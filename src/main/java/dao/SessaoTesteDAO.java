@@ -74,4 +74,53 @@ public class SessaoTesteDAO extends GenericDAO {
 
         return sessoes;
     }
+
+    public SessaoTeste getById(Long id) {
+        String sql = "SELECT * FROM SessaoTeste WHERE id_sessao = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                SessaoTeste sessao = new SessaoTeste();
+
+                sessao.setIdSessao(rs.getLong("id_sessao"));
+                sessao.setDescricao(rs.getString("descricao"));
+                sessao.setNomeTestador(rs.getString("nome_testador"));
+                sessao.setEstrategiaId(rs.getLong("estrategia_id"));
+                sessao.setTempo(rs.getInt("tempo"));
+                sessao.setProjetoId(rs.getLong("projeto_id"));
+                sessao.setUsuarioId(rs.getLong("usuario_id"));
+                sessao.setStatus(Status.fromString(rs.getString("status")));
+                sessao.setDataCriacao(rs.getTimestamp("data_criacao"));
+
+                return sessao;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    public void atualizarStatus(Long idSessao, Status novoStatus) {
+        String sql = "UPDATE SessaoTeste SET status = ? WHERE id_sessao = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, novoStatus.toString());
+            stmt.setLong(2, idSessao);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
