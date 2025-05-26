@@ -41,4 +41,4 @@ Pedro Vinicius Ferreira Santos
    ./mvnw tomcat7:deploy
 
 5. Acesse
-   [http://localhost:8080/nome-do-projeto](http://localhost:8080/nome-do-projeto)
+   [http://localhost:8080/projeto1_DSW](http://localhost:8080/projeto1_DSW)
