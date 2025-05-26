@@ -16,9 +16,6 @@
 <h1>Usuário Logado</h1>
 <a href="${pageContext.request.contextPath}/logado/testador">Página do Testador</a><br>
 <a href="${pageContext.request.contextPath}/logado/admin">Página do Admin</a><br><br>
-Email:${sessionScope.usuarioLogado.email}
-Senha:${sessionScope.usuarioLogado.senha}
-Papel:${sessionScope.usuarioLogado.papel}
 
 <ul>
   <c:forEach var="estrategia" items="${applicationScope.listaEstrategias}">
