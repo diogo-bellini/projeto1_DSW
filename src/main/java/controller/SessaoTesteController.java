@@ -33,6 +33,12 @@ public class SessaoTesteController extends HttpServlet {
                         .forward(request, response);
                 return;
 
+            case "/listarSessaoTeste":
+                listarSessao(request, response);
+                request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/listarSessaoTeste.jsp")
+                        .forward(request, response);
+                break;
+
             case "/executarSessaoTeste":
                 executarSessao(request, response);
                 request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/executarSessaoTeste.jsp")
@@ -59,8 +65,11 @@ public class SessaoTesteController extends HttpServlet {
                 case "/cadastrarSessao":
                     insere(request, response);
                     break;
-//                case "/executarSessao":
-//                    executar(request, response);
+
+                case "/executarSessao":
+                    executarSessao(request, response);
+                    break;
+
                 default:
                     break;
             }
@@ -96,7 +105,7 @@ public class SessaoTesteController extends HttpServlet {
     }
 
 
-    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    private void listarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuarioLogado");
             Long usuarioId = usuario.getId_usuario();
@@ -110,5 +119,15 @@ public class SessaoTesteController extends HttpServlet {
             request.setAttribute("erro", "Erro ao cadastrar sessão.");
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
+    }
+
+    private void executarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Long idSessao = Long.parseLong(request.getParameter("idSessao"));
+
+        SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+        sessao_teste_dao.atualizarStatus(idSessao, Status.em_execucao);
+        SessaoTeste sessao = sessao_teste_dao.getById(idSessao);
+
+        request.setAttribute("sessao", sessao);
     }
 }

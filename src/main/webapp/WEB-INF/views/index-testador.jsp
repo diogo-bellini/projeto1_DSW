@@ -15,7 +15,7 @@
     <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/cadastroSessaoTeste">Cadastrar Sessão de Teste</a>
   </li>
   <li>
-    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/executarSessaoTeste">Listar e executar Sessões de Teste</a>
+    <a href="${pageContext.request.contextPath}/logado/testador/sessaoTeste/listarSessaoTeste">Listar e executar Sessões de Teste</a>
   </li>
   <li>
     <a href="${pageContext.request.contextPath}/logout.jsp">Sair</a>
