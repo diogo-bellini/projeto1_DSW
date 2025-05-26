@@ -73,6 +73,10 @@ public class SessaoTesteController extends HttpServlet {
                     adicionarBug(request, response);
                     break;
 
+                case "/finalizarSessao":
+                    finalizarSessao(request, response);
+                    break;
+
                 default:
                     break;
             }
@@ -163,6 +167,19 @@ public class SessaoTesteController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao adicionar bug.");
+        }
+    }
+
+    private void finalizarSessao(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            Long sessaoId = Long.parseLong(request.getParameter("idSessao"));
+            SessaoTesteDAO sessao_teste_dao = new SessaoTesteDAO();
+            sessao_teste_dao.atualizarStatus(sessaoId, Status.finalizado);
+
+            response.sendRedirect(request.getContextPath() + "/logado/testador/sessaoTeste/listarSessaoTeste");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro ao finalizar sessão.");
         }
     }
 

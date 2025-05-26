@@ -11,6 +11,13 @@
 <h2>Executando Sessão: ${sessao.descricao}</h2>
 <p><strong>Status atual:</strong> ${sessao.status}</p>
 
+<c:if test="${sessao.status ne 'finalizado'}">
+  <form method="post" action="${pageContext.request.contextPath}/logado/testador/sessaoTeste/finalizarSessao">
+    <input type="hidden" name="idSessao" value="${sessao.idSessao}" />
+    <button type="submit">Finalizar Sessão</button>
+  </form>
+</c:if>
+
 <h3>Adicionar novo bug</h3>
 <form method="post" action="${pageContext.request.contextPath}/logado/testador/sessaoTeste/adicionarBug">
   <input type="hidden" name="sessaoId" value="${sessao.idSessao}"/>
