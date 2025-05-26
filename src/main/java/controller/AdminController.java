@@ -69,11 +69,17 @@ public class AdminController extends HttpServlet{
 
         try {
             switch (action) {
-                case "/cadastro":
-                    apresentaFormCadastro(request, response);
+                case "/cadastro-admin":
+                    apresentaFormCadastro(request, response, "administrador");
                     break;
-                case "/insercao":
-                    insere(request, response);
+                case "/cadastro-testador":
+                    apresentaFormCadastro(request, response, "testador");
+                    break;
+                case "/insercao-admin":
+                    insere(request, response, "administrador");
+                    break;
+                case "/insercao-testador":
+                    insere(request, response, "testador");
                     break;
                 case "/remocao":
                     remove(request, response);
@@ -81,11 +87,17 @@ public class AdminController extends HttpServlet{
                 case "/edicao":
                     apresentaFormEdicao(request, response);
                     break;
-                case "/atualizacao":
-                    atualiza(request, response);
+                case "/atualizacao-admin":
+                    atualiza(request, response, "administrador");
                     break;
-                case "/lista-admins":
-                    listaAdmins(request, response);
+                case "/atualizacao-testador":
+                    atualiza(request, response, "testador");
+                    break;
+                case "/lista-admin":
+                    listaUser(request, response, "administrador");
+                    break;
+                case "/lista-testador":
+                    listaUser(request, response, "testador");
                     break;
                 default:
                     request.getRequestDispatcher("/WEB-INF/views/index-admin.jsp").forward(request, response);
@@ -96,52 +108,72 @@ public class AdminController extends HttpServlet{
         }
     }
 
-    private void listaAdmins(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Usuario> listaAdmins = usuarioDAO.getAll();
-        listaAdmins.removeIf(u1 -> u1.getPapel() != Papel.administrador);
-        request.setAttribute("listaAdmins", listaAdmins);
+    private void listaUser(HttpServletRequest request, HttpServletResponse response, String tipoUser) throws ServletException, IOException {
+        List<Usuario> listaUser = usuarioDAO.getAll();
+        if (tipoUser.equals("administrador")) {
+            listaUser.removeIf(u1 -> u1.getPapel() != Papel.administrador);
+        } else if (tipoUser.equals("testador")) {
+            listaUser.removeIf(u1 -> u1.getPapel() != Papel.testador);
+        }
+        request.setAttribute("tipoUser", tipoUser);
+        request.setAttribute("listaUser", listaUser);
         request.setAttribute("contextPath", request.getContextPath().replace("/", ""));
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/listaAdmin.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/logado/admin/listaUser.jsp");
         dispatcher.forward(request, response);
     }
 
-    private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/logado/admin/formAdmin.jsp").forward(request, response);
+    private void apresentaFormCadastro(HttpServletRequest request, HttpServletResponse response, String tipoUser) throws ServletException, IOException {
+        request.setAttribute("tipoUser", tipoUser);
+        request.getRequestDispatcher("/WEB-INF/views/logado/admin/formUser.jsp").forward(request, response);
     }
 
     private void apresentaFormEdicao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = Long.parseLong(request.getParameter("id_usuario"));
-        Usuario admin = usuarioDAO.getbyID(id);
-        request.setAttribute("admin", admin);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/logado/admin/formAdmin.jsp");
-        dispatcher.forward(request, response);
+        Long id = Long.parseLong(request.getParameter("id"));
+        Usuario user = usuarioDAO.getbyID(id);
+        String tipoUser = user.getPapel() == Papel.administrador ? "administrador" : "testador";
+        request.setAttribute("user", user);
+        request.setAttribute("tipoUser", tipoUser);
+        request.getRequestDispatcher("/WEB-INF/views/logado/admin/formUser.jsp").forward(request, response);
     }
 
-    private void insere(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void insere(HttpServletRequest request, HttpServletResponse response, String tipoUser) throws IOException {
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
-        Papel papel = Papel.valueOf(request.getParameter("papel"));
-        Usuario admin = new Usuario(nome, email, senha, papel);
-        usuarioDAO.insert(admin);
-        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
+        Papel papel = Papel.valueOf(tipoUser);
+        Usuario user = new Usuario(nome, email, senha, papel);
+        usuarioDAO.insert(user);
+        if (user.getPapel() == Papel.administrador) {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-admin");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-testador");
+        }
     }
 
-    private void atualiza(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Long id = Long.parseLong(request.getParameter("id_usuario"));
+    private void atualiza(HttpServletRequest request, HttpServletResponse response, String tipoUser) throws IOException {
+        Long id = Long.parseLong(request.getParameter("id"));
         String nome = request.getParameter("nome");
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
-        Papel papel = Papel.valueOf(request.getParameter("papel"));
-        Usuario admin = new Usuario(id, nome, email, senha, papel);
-        usuarioDAO.update(admin);
-        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
+        Papel papel = Papel.valueOf(tipoUser);
+        Usuario user = new Usuario(id, nome, email, senha, papel);
+        usuarioDAO.update(user);
+        if (tipoUser.equals("administrador")) {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-admin");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-testador");
+        }
     }
 
     private void remove(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Long id = Long.parseLong(request.getParameter("id_usuario"));
-        Usuario admin = new Usuario(id);
-        usuarioDAO.delete(admin);
-        response.sendRedirect(request.getContextPath() + "/logado/admin/listaAdmin.jsp");
+        Long id = Long.parseLong(request.getParameter("id"));
+        Usuario user = new Usuario(id);
+
+        if (usuarioDAO.getbyID(id).getPapel() == Papel.administrador) {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-admin");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/logado/admin/lista-testador");
+        }
+        usuarioDAO.delete(user);
     }
 }
