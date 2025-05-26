@@ -29,7 +29,6 @@ public class SessaoTesteController extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/views/index-testador.jsp").forward(request, response);
             return;
         }
-
         switch (path) {
             case "/cadastroSessaoTeste":
                 request.getRequestDispatcher("/WEB-INF/views/logado/testador/sessaoTeste/cadastroSessaoTeste.jsp")
